@@ -1,4 +1,5 @@
 .code
 .idea
 
-./target
+target
+**/*.env
