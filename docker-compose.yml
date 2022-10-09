@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  db:
+    container_name: db
+    image: postgres:14-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  coachee:
+    container_name: coachee
+    image: coachee:latest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://postgres:password@localhost/coachee
+      RUST_LOG: actix_web=debug,actix_server=info
+      
+volumes:
+  db-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: 'db-data'
